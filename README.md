@@ -1,2 +1,2 @@
 # bible
-Bible in simplified Chinese
+Bible in Simplified Chinese

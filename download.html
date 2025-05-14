@@ -86,17 +86,11 @@
                     console.log(`delete cache - ${cacheNameList[i]}`);
                     await caches.delete(cacheNameList[i]);
                 }
-
-            } else {
-                var isDownloadOkay = await downloadFile(testUrl).catch(err => {
-                    divMsg2.innerHTML = `<div>网络出错-${err.message}<br>请稍后再试</div>`;
-                    return;
-                });
-                if (!isDownloadOkay) {
-                    divMsg2.innerHTML = "<div>无法连接到服务器<br>请稍后再试</div>";
-                    return;
-                }
-            }
+            } else if (location.protocol=="http:") {
+                divMsg2.innerHTML = '<div>Please use https to reload this page</div>';
+                window.location.href = window.location.href.replace('http','https');
+                return;
+            } 
 
             divMsg2.innerHTML += '<div>Please wait while working ...</div>';
             await downloadAllFiles();
@@ -106,12 +100,12 @@
         async function downloadAllFiles() {
             var bibleBooks = await downloadJson("biblebooks.json");
             for(var i=0;i<bibleBooks.length;i++){
-	        if(i<24){
-		  divMsg2.innerHTML += `<div>downloading ${i+1}. ${bibleBooks[i].n} ...</div>`; 
-		}else if(i>24){
-		  divMsg2.innerHTML += `<div>downloading ${i}. ${bibleBooks[i].n} ...</div>`; 
-		}
-                console.info(`downloading ${bibleBooks[i].n} ...`);
+                if(i<24)
+                    divMsg2.innerHTML += `<div>downloading ${i+1}. ${bibleBooks[i].n} ...</div>`; 
+                else if(i>24)
+                    divMsg2.innerHTML += `<div>downloading ${i}. ${bibleBooks[i].n} ...</div>`; 
+				
+                console.info(`downloading ${i}. {bibleBooks[i].n} ...`);
                 await downloadFiles(bibleBooks[i].id, bibleBooks[i].s, bibleBooks[i].e);
             }
             await downloadFile("/");
@@ -120,7 +114,7 @@
             await downloadFile("main.js");
         }
         async function downloadFiles(folderId, startNum, endNum) {
-			var subFolder = String(folderId).padStart(2,'0');
+	    var subFolder = String(folderId).padStart(2,'0');
             for (var i = startNum; i <= endNum; i++) {
                 var theFile = `${subFolder}/${i}.htm`;
                 var flag = await downloadFile(theFile);

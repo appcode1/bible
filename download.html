@@ -106,7 +106,11 @@
         async function downloadAllFiles() {
             var bibleBooks = await downloadJson("biblebooks.json");
             for(var i=0;i<bibleBooks.length;i++){
-                divMsg2.innerHTML += `<div>downloading ${bibleBooks[i].n} ...</div>`;
+	        if(i<24){
+		  divMsg2.innerHTML += `<div>downloading ${i+1}. ${bibleBooks[i].n} ...</div>`; 
+		}else if(i>24){
+		  divMsg2.innerHTML += `<div>downloading ${i}. ${bibleBooks[i].n} ...</div>`; 
+		}
                 console.info(`downloading ${bibleBooks[i].n} ...`);
                 await downloadFiles(bibleBooks[i].id, bibleBooks[i].s, bibleBooks[i].e);
             }

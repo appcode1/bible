@@ -16,6 +16,9 @@
         .bi-me-1 {
             margin-right:0.25rem;
         }
+        .blue {
+            color: #0d6efd
+        }
     </style>
     <title>圣经中文版Download</title>
   </head>
@@ -94,7 +97,7 @@
 
             divMsg2.innerHTML += '<div>Please wait while working ...</div>';
             await downloadAllFiles();
-            divMsg2.innerHTML += `<div>Download complete!</div><div>total: ${totalCount}, downloaded: ${downloadCount}</div>`;
+            divMsg2.innerHTML += `<div class="blue">Download complete!</div><div class="blue">Total: ${totalCount}, downloaded: ${downloadCount}</div>`;
             console.info(`Download complete! total: ${totalCount}, downloaded: ${downloadCount}`);
         }
         async function downloadAllFiles() {
@@ -108,7 +111,7 @@
                 console.info(`downloading ${i}. {bibleBooks[i].n} ...`);
                 await downloadFiles(bibleBooks[i].id, bibleBooks[i].s, bibleBooks[i].e);
             }
-            await downloadFile("/");
+            await downloadFile(".");
             await downloadFile("index.js");
             await downloadFile("main.css");
             await downloadFile("main.js");

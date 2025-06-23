@@ -71,10 +71,11 @@
 
         async function downloadApp() {
             btnDownload.classList.add("disabled");
+            selectBooks.disabled = true;
             await verifyAndDownload();
             btnDownload.classList.remove("disabled");
+            selectBooks.disabled = false;
         }
-
         async function verifyAndDownload() {
             divMsg2.innerHTML = "";
             if (!navigator.onLine) {

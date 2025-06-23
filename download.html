@@ -25,13 +25,26 @@
   <body>
     <div class="container my-3" style="max-width: 30rem;">
         <h3>圣经中文版download</h3>
+        <span class="ms-2 text-muted">文件下载后，可以离线使用</span>
         <div id="divmsg1" class="text-success my-2"></div>
         <div class="my-3">
-            <button id="btndownload" class="btn btn-primary">
+                <select id="selectBooks" class="form-select my-1" style="width: 18rem; display:inline-block;">
+                    <option value="0" selected>所有66卷(旧约39卷，新约27卷)</option>
+                    <option value="1">1. 创世记</option>
+                    <option value="2">2. 出埃及记</option>
+                    <option value="3">3. 利未记</option>
+                    <option value="4">4. 民数记</option><option value="5">5. 申命记</option><option value="6">6. 约书亚记</option><option value="7">7. 士师记</option><option value="8">8. 路得记</option><option value="9">9. 撒母耳记上</option><option value="10">10. 撒母耳记下</option><option value="11">11. 列王纪上</option><option value="12">12. 列王纪下</option><option value="13">13. 历代志上</option><option value="14">14. 历代志下</option><option value="15">15. 以斯拉记</option><option value="16">16. 尼希米记</option><option value="17">17. 以斯帖记</option><option value="18">18. 约伯记</option><option value="19">19. 诗篇</option><option value="20">20. 箴言</option><option value="21">21. 传道书</option><option value="22">22. 雅歌</option>
+                    <option value="23">23. 以赛亚书</option>
+                    <option value="24">24. 耶利米书</option>
+                    <option value="25">25. 耶利米哀歌</option>
+                    <option value="26">26. 以西结书</option><option value="27">27. 但以理书</option><option value="28">28. 何西阿书</option><option value="29">29. 约珥书</option><option value="30">30. 阿摩司书</option><option value="31">31. 俄巴底亚书</option><option value="32">32. 约拿书</option><option value="33">33. 弥迦书</option><option value="34">34. 那鸿书</option><option value="35">35. 哈巴谷书</option><option value="36">36. 西番雅书</option><option value="37">37. 哈该书</option><option value="38">38. 撒迦利亚书</option><option value="39">39. 玛拉基书</option><option value="40">40. 马太福音</option><option value="41">41. 马可福音</option><option value="42">42. 路加福音</option><option value="43">43. 约翰福音</option><option value="44">44. 使徒行传</option><option value="45">45. 罗马书</option><option value="46">46. 哥林多前书</option><option value="47">47. 哥林多后书</option><option value="48">48. 加拉太书</option><option value="49">49. 以弗所书</option><option value="50">50. 腓立比书</option><option value="51">51. 歌罗西书</option><option value="52">52. 帖撒罗尼迦前书</option><option value="53">53. 帖撒罗尼迦后书</option><option value="54">54. 提摩太前书</option><option value="55">55. 提摩太后书</option><option value="56">56. 提多书</option><option value="57">57. 腓利门书</option><option value="58">58. 希伯来书</option><option value="59">59. 雅各书</option><option value="60">60. 彼得前书</option><option value="61">61. 彼得后书</option><option value="62">62. 约翰一书</option><option value="63">63. 约翰二书</option><option value="64">64. 约翰三书</option><option value="65">65. 犹大书</option>
+                    <option value="66">66. 启示录</option>
+                </select>
+            <button id="btndownload" class="btn btn-primary my-1">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-download bi-me-1" viewBox="0 0 16 16">
                     <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
                     <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
-                  </svg>下载文件</button> <span class="ms-2 text-muted">文件下载后，可以离线使用</span>
+                  </svg>下载文件</button>
             <div id="divmsg2" class="text-danger my-2"></div>
         </div>
         <div class="mt-5">
@@ -45,6 +58,8 @@
         var divMsg1 = document.getElementById("divmsg1");
         var divMsg2 = document.getElementById("divmsg2");
         var btnDownload = document.getElementById("btndownload");
+        var selectBooks = document.getElementById("selectBooks");
+        var cacheName = "bible-0.0.7";
 
         if (window.location.protocol == "https:")
             divMsg1.innerHTML = "你的网络连接是HTTPS协议(Secure)";
@@ -66,10 +81,14 @@
                 divMsg2.innerHTML = "当前网络是断开的，无法download！";
                 return;
             }
+
+            console.info("selected book: " + selectBooks.value  + " - " + selectBooks.options[selectBooks.selectedIndex].text);
+
             var testUrl = "download.html";
             if (location.protocol == "https:" || location.host == "localhost") {
                 var cacheNameList = await caches.keys();
                 cacheNameList = cacheNameList.filter(a => a.startsWith("bible-"));
+                cacheName = cacheNameList[0];
                 for(var i=0;i<cacheNameList.length;i++){
                     await caches.open(cacheNameList[i])
                     .then(cache=>cache.delete(testUrl,{ignoreSearch: true}));
@@ -85,21 +104,31 @@
                     return;
                 }
 
-                for(var i=0;i<cacheNameList.length;i++){
-                    console.log(`delete cache - ${cacheNameList[i]}`);
-                    await caches.delete(cacheNameList[i]);
-                }
             } else if (location.protocol=="http:") {
                 divMsg2.innerHTML = '<div>Please use https to reload this page</div>';
                 window.location.href = window.location.href.replace('http','https');
                 return;
             } 
 
-            divMsg2.innerHTML += '<div>Please wait while working ...</div>';
-            await downloadAllFiles();
+            if(selectBooks.value == "0") {
+                divMsg2.innerHTML = '<div class="blue">正在下载所有66卷圣经，请稍等...</div>';
+                var cacheNameList = await caches.keys();
+                for(var i=0;i<cacheNameList.length;i++){
+                    console.log(`delete cache - ${cacheNameList[i]}`);
+                    await caches.delete(cacheNameList[i]);
+                }
+                divMsg2.innerHTML += '<div>Please wait while working ...</div>';
+                await downloadAllFiles();
+            }else {
+                divMsg2.innerHTML = `<div class="blue">正在下载 [${selectBooks.options[selectBooks.selectedIndex].text}]，请稍等...</div>`;
+                divMsg2.innerHTML += '<div>Please wait while working ...</div>';
+                await downloadSelectedBook(selectBooks.value);
+            }
+
             divMsg2.innerHTML += `<div class="blue">Download complete!</div><div class="blue">Total: ${totalCount}, downloaded: ${downloadCount}</div>`;
             console.info(`Download complete! total: ${totalCount}, downloaded: ${downloadCount}`);
         }
+
         async function downloadAllFiles() {
             var bibleBooks = await downloadJson("biblebooks.json");
             for(var i=0;i<bibleBooks.length;i++){
@@ -116,10 +145,29 @@
             await downloadFile("main.css");
             await downloadFile("main.js");
         }
-        async function downloadFiles(folderId, startNum, endNum) {
+        async function downloadSelectedBook(bookId) {
+            if(!bookId) return;
+            bookId = parseInt(bookId);
+            if(isNaN(bookId) || bookId<1 || bookId>66) {
+                divMsg2.innerHTML = `<div class="text-danger">Invalid book ID: ${bookId}</div>`;
+                return;
+            }
+
+            var bibleBooks = await downloadJson("biblebooks.json");
+            for(var i=0;i<bibleBooks.length;i++){
+                if(bibleBooks[i].id != bookId) continue;
+                await downloadFiles(bibleBooks[i].id, bibleBooks[i].s, bibleBooks[i].e, true);
+            }
+        }
+        async function downloadFiles(folderId, startNum, endNum, deleteOldCache) {
 	    var subFolder = String(folderId).padStart(2,'0');
             for (var i = startNum; i <= endNum; i++) {
                 var theFile = `${subFolder}/${i}.htm`;
+                if(deleteOldCache==true && cacheName){
+                    console.log(`delete old cache: ${cacheName}, file: ${theFile}`);
+                    await caches.open(cacheName)
+                        .then(cache => cache.delete(theFile, {ignoreSearch: true}));
+                }
                 var flag = await downloadFile(theFile);
                 totalCount++;
                 if(flag) downloadCount++;
@@ -136,6 +184,7 @@
                 })
                 .catch(err => {
                     console.log(err);
+                    divMsg2.innerHTML += `<div class="text-danger">Error downloading ${url}</div>`;
                 });
             return result;
         }

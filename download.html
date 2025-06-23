@@ -60,6 +60,7 @@
         var btnDownload = document.getElementById("btndownload");
         var selectBooks = document.getElementById("selectBooks");
         var cacheName = "bible-0.0.7";
+        var totalCount = 0, downloadCount = 0;
 
         if (window.location.protocol == "https:")
             divMsg1.innerHTML = "你的网络连接是HTTPS协议(Secure)";
@@ -74,15 +75,12 @@
             btnDownload.classList.remove("disabled");
         }
 
-        var totalCount = 0, downloadCount = 0;
         async function verifyAndDownload() {
             divMsg2.innerHTML = "";
             if (!navigator.onLine) {
                 divMsg2.innerHTML = "当前网络是断开的，无法download！";
                 return;
             }
-
-            console.info("selected book: " + selectBooks.value  + " - " + selectBooks.options[selectBooks.selectedIndex].text);
 
             var testUrl = "download.html";
             if (location.protocol == "https:" || location.host == "localhost") {
@@ -110,6 +108,7 @@
                 return;
             } 
 
+            console.info("selected book: " + selectBooks.value  + " - " + selectBooks.options[selectBooks.selectedIndex].text);
             if(selectBooks.value == "0") {
                 divMsg2.innerHTML = '<div class="blue">正在下载所有66卷圣经，请稍等...</div>';
                 var cacheNameList = await caches.keys();
@@ -118,10 +117,12 @@
                     await caches.delete(cacheNameList[i]);
                 }
                 divMsg2.innerHTML += '<div>Please wait while working ...</div>';
+                totalCount = 0, downloadCount = 0;
                 await downloadAllFiles();
             }else {
                 divMsg2.innerHTML = `<div class="blue">正在下载 [${selectBooks.options[selectBooks.selectedIndex].text}]，请稍等...</div>`;
                 divMsg2.innerHTML += '<div>Please wait while working ...</div>';
+                totalCount = 0, downloadCount = 0;
                 await downloadSelectedBook(selectBooks.value);
             }
 
@@ -137,8 +138,13 @@
                 else if(i>24)
                     divMsg2.innerHTML += `<div>downloading ${i}. ${bibleBooks[i].n} ...</div>`; 
 				
-                console.info(`downloading ${i}. {bibleBooks[i].n} ...`);
+                console.info(`downloading ${i}. ${bibleBooks[i].n} ...`);
                 await downloadFiles(bibleBooks[i].id, bibleBooks[i].s, bibleBooks[i].e);
+
+                window.scrollTo({
+                    top: document.body.scrollHeight,
+                    behavior: 'smooth'
+                });                
             }
             await downloadFile(".");
             await downloadFile("index.js");

@@ -9,5 +9,5 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
 $data = file_get_contents('https://myip.free.nf/');
 header('Content-Type: text/html; charset=UTF-8');
 //echo $data;
-echo 'Call... https://myip.free.nf/'
+echo '<html><title>call myip.free.nf</title><body>click to see my IP: <a href="https://myip.free.nf/">https://myip.free.nf/</a></body></html>'
 ?>

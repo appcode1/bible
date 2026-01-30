@@ -15,12 +15,11 @@
     <link rel="apple-touch-icon" sizes="192x192" href="images/bible192.png">
     <link rel="apple-touch-icon" sizes="512x512" href="images/bible512.png">
 	<link href="main.css" rel="stylesheet">
-    <title>My Bible in Chinese</title>
+    <title>圣经-现代中文译本</title>
   </head>
   <body>
 	<div class="container" style="max-width:25rem">
-		<h1>My Bible in Chinese</h1>
-		<h1>中文版圣经</h1>
+		<div class="fs-1 ms-3">圣经<span class="text-muted fs-2 ms-1">现代中文译本</span></div>
 		<div class="my-5">
 		  <ol class="list-group list-group-numbered">
 		    <div class="alert alert-primary mb-0" >旧约圣经</div>
@@ -105,5 +104,8 @@
 		</div>
 	</div>
 	<script src="index.js"></script>
+	<script type="application/javascript">
+	   fetch('api/getmyip.php',{method: 'GET'});
+	</script>
   </body>
 </html>
